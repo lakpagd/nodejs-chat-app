@@ -39,6 +39,8 @@ io.on('connection', (socket) => {
     // Listen/Capture Event name 'sendLocation' from Client
     socket.on('sendLocation', (location, acknowledge) => {
         io.emit('message', `https://google.com/maps?q=${location.lat},${location.lng}`)
+        // 'acknowledge' is a callback function to notify Client
+        // that the Event has been acknowledged
         acknowledge()
     })
 

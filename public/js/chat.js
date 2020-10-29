@@ -25,6 +25,8 @@ document.querySelector('#message-form').addEventListener('submit', (e) => {
     // Send message to server, read from 'message-form' 
     // Event name: sendMessage
     socket.emit('sendMessage', message, (error) => {
+        // 'error' returns error message when this callback function
+        //  is called by Server 
         if (error) {
             return console.log(error);
         }
@@ -46,6 +48,7 @@ document.querySelector('#send-location').addEventListener('click', () => {
             lat: position.coords.latitude,
             lng: position.coords.longitude
         }, (acknowledge) => {
+            // 'acknowledge' is a callback function 
             console.log('Location shared!');
         })
     })
