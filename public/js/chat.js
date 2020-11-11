@@ -2,14 +2,23 @@
 // io() connects client to the server
 const socket = io()
 
+// ELEMENTS
+// '$' sign is used to let variable be identified as an element from DOM
+const $messageForm = document.querySelector('#message-form')
+const $messageFormInput = $messageForm.querySelector('input')
+const $messageFormButton = $messageForm.querySelector('button')
+const $sendLocationButton = document.querySelector('#send-location')
+
 socket.on('message', (message) => {
     console.log(message)
 })
 
 // Read from HTML Element ID 'message-form'
-document.querySelector('#message-form').addEventListener('submit', (e) => {
+$messageForm.addEventListener('submit', (e) => {
     // Prevents default browser refresh
     e.preventDefault()
+
+    $messageFormButton.setAttribute('disabled', 'disabled')
 
     // console.log('SEND BUTTON CLICKED!!!');
     
@@ -25,6 +34,9 @@ document.querySelector('#message-form').addEventListener('submit', (e) => {
     // Send message to server, read from 'message-form' 
     // Event name: sendMessage
     socket.emit('sendMessage', message, (error) => {
+        $messageFormButton.removeAttribute('disabled')
+        $messageFormInput.value = ''
+        $messageFormInput.focus()
         // 'error' returns error message when this callback function
         //  is called by Server 
         if (error) {
@@ -37,10 +49,12 @@ document.querySelector('#message-form').addEventListener('submit', (e) => {
 
 // https://developer.mozilla.org/en-US/docs/Web/API/Geolocation/getCurrentPosition
 
-document.querySelector('#send-location').addEventListener('click', () => {
+$sendLocationButton.addEventListener('click', () => {
     if (!navigator.geolocation) {
         return alert('Geolocation is not supported by your browser.')
     }
+
+    $sendLocationButton.setAttribute('disabled', 'disabled')
 
     navigator.geolocation.getCurrentPosition( (position) => {
         // console.log(position)
@@ -49,6 +63,7 @@ document.querySelector('#send-location').addEventListener('click', () => {
             lng: position.coords.longitude
         }, (acknowledge) => {
             // 'acknowledge' is a callback function 
+            $sendLocationButton.removeAttribute('disabled')
             console.log('Location shared!');
         })
     })
